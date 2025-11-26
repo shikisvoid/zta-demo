@@ -6,10 +6,10 @@ class DataVault:
         self.cipher = Fernet(self.key)
     
     def encrypt(self, data: str) -> bytes:
-        return self._cipher.encrypt(data.encode())
+        return self.cipher.encrypt(data.encode())
     
     def decrypt(self, token: bytes) -> str:
         try:
-            return self._cipher.decrypt(token).decode()
+            return self.cipher.decrypt(token).decode()
         except Exception:
             return "[DECRYPTION_ERROR] Invalid Key"
