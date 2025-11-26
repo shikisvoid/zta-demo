@@ -5,6 +5,13 @@ NETWORK_SEGMENTS = {
     "PUBLIC_WIFI": ["Guest", "Patient"]
 }
 
+FIREWALL_RULES = {
+    "PUBLIC_WIFI -> EHR_CORE": ["HTTPS", "TLS_1.3"],
+    "IOMT_VLAN -> EHR_CORE": ["HL7", "MQTT", "DICOM"],
+    "FINANCE_SUBNET -> FINANCE_SUBNET": ["HTTPS", "SSH", "RDP"],
+    
+}
+
 USERS_DB = {
     "dr_house": {
         "password": "secure_password_123",

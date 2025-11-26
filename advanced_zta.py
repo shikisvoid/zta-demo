@@ -1,5 +1,6 @@
 import time
 import json
+import os
 import math
 from dataclasses import dataclass
 
@@ -21,6 +22,11 @@ class AccessRequest:
     timestamp: float
 
 class SIEMLogger:
+    def __init__(self, filename="siem_logs.json", reset=False):
+        self.filename = filename
+        if reset and os.path.exists(self.filename):
+            os.remove(self.filename)
+
     def log(self, event_type, risk_score, details):
         log_entry = {
             "timestamp": time.time(),
@@ -28,12 +34,16 @@ class SIEMLogger:
             "risk_score": risk_score,
             "details": details
         }
-        print(f" [SIEM LOG] >> {json.dumps(log_entry)}")
+        
+        with open(self.filename, "a") as f:
+            f.write(json.dumps(log_entry) + "\n")
+
+        print(f"[SIEM] Logged Event: {event_type} (Risk: {risk_score})")
 
 class AdaptiveRiskEngine:
-    def __init__(self):
+    def __init__(self, logger_instance):
         self.user_history = {}
-        self.logger = SIEMLogger()
+        self.logger = logger_instance
 
     def _calculate_distance(self, loc1, loc2):
         if loc1 not in GEO_DB or loc2 not in GEO_DB:

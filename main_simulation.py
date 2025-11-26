@@ -1,77 +1,131 @@
 import time
+import json
 from identity import IdentityProvider
 from device import DeviceManager
 from threats import AdvancedPhishingGuard
 from zta_engine import SecureAccessProxy
 
+def generate_siem_dashboard():
+    """Reads the JSON log file and displays a summary table."""
+    print("\n\n")
+    print("="*100)
+    print(f"{'SIEM DASHBOARD - INCIDENT REPORT':^100}")
+    print("="*100)
+    print(f"{'TIMESTAMP':<25} | {'EVENT TYPE':<18} | {'RISK':<5} | {'DETAILS'}")
+    print("-" * 100)
+    
+    try:
+        with open("siem_logs.json", "r") as f:
+            for line in f:
+                entry = json.loads(line)
+                # Format the details dictionary into a string
+                details_str = str(entry['details'])
+                # Truncate if too long for display
+                if len(details_str) > 50: 
+                    details_str = details_str[:47] + "..."
+                
+                print(f"{entry['timestamp']:<25} | {entry['event_type']:<18} | {str(entry['risk_score']):<5} | {details_str}")
+    except FileNotFoundError:
+        print("No logs found. Run the simulation first.")
+    print("="*100)
+    print("\n")
+
 def run_scenarios():
     idp = IdentityProvider()
     dev_mgr = DeviceManager()
     phishing_guard = AdvancedPhishingGuard()
-    
     zta = SecureAccessProxy(idp, dev_mgr)
 
     print("============================================================")
-    print("   HEALTHCARE ZERO TRUST ARCHITECTURE - ADVANCED DEMO       ")
+    print("   HEALTHCARE ZERO TRUST ARCHITECTURE - COMPREHENSIVE DEMO  ")
     print("============================================================")
 
-    # --- SCENARIO 1: PHISHING (Perimeter Defense) ---
-    print("\n\n--- [SCENARIO 1] Phishing Detection ---")
+    # --- PART 1: THREAT DETECTION ---
+    print("\n\n=== PART 1: THREAT INTELLIGENCE ===")
+    
+    # [SCENARIO 1] Phishing
+    print("\n--- [SCENARIO 1] Phishing Email Defense ---")
     email = "Urgent: Verify your password now or lose access"
     print(f"Incoming: '{email}'")
     verdict = phishing_guard.scan_email(email, sender="hacker@evil.com")
     print(f"Verdict: {verdict.upper()}")
 
-    # --- SCENARIO 2: NORMAL LOGIN (Baseline) ---
-    print("\n\n--- [SCENARIO 2] Dr. House Normal Access ---")
-    req_normal = {
+    # --- PART 2: ACCESS CONTROL & ADAPTIVE RISK ---
+    print("\n\n=== PART 2: ACCESS CONTROL & RISK ENGINE ===")
+
+    # [SCENARIO 2] Normal Login
+    print("\n--- [SCENARIO 2] Valid Doctor Access (Baseline) ---")
+    req_valid = {
         "user": "dr_house", "password": "secure_password_123", "mfa": "mfa_taken_A1",
-        "device_id": "ipad_pro_01", "target_segment": "EHR_CORE", "data": "Patient 101 Vitals",
-        
-        "ip_address": "10.2.1.45", "location": "Hospital_Local", "timestamp": time.time()
+        "device_id": "ipad_pro_01", "target_segment": "EHR_CORE", "data": "Patient Vitals",
+        "ip_address": "10.2.1.45", "location": "Hospital_Local", "timestamp": time.time(),
+        "protocol": "HTTPS"
     }
-    res = zta.process_access_request(req_normal)
+    res = zta.process_access_request(req_valid)
     print(f"Outcome: {res['status']} | Reason: {res['reason']}")
 
-    # --- SCENARIO 3: IMPOSSIBLE TRAVEL (Geo-Velocity) ---
-    print("\n\n--- [SCENARIO 3] Impossible Travel Attack ---")
-    
-    req_travel = req_normal.copy()
+    # [SCENARIO 3] Impossible Travel
+    print("\n--- [SCENARIO 3] Impossible Travel (London) ---")
+    req_travel = req_valid.copy()
     req_travel["location"] = "London"
-    req_travel["ip_address"] = "82.15.22.11" 
     req_travel["timestamp"] = time.time() + 300 
-    
     res = zta.process_access_request(req_travel)
     print(f"Outcome: {res['status']} | Reason: {res['reason']}")
 
-    # --- SCENARIO 4: OFF-HOURS ACCESS (Time-of-Day) ---
-    print("\n\n--- [SCENARIO 4] Suspicious Off-Hours Access ---")
-    
-    t = time.localtime()
-    t_3am = time.mktime((t.tm_year, t.tm_mon, t.tm_mday, 3, 0, 0, 0, 0, -1))
-    
+    # [SCENARIO 4] Off-Hours Access
+    print("\n--- [SCENARIO 4] Off-Hours Access (3 AM) ---")
+    t_3am = time.mktime(time.localtime()) - (time.localtime().tm_hour * 3600) + (3 * 3600)
     req_night = {
         "user": "nurse_joy", "password": "nurse_pass_456", "mfa": "mfa_taken_B2",
-        "device_id": "ipad_pro_01", 
-        "target_segment": "EHR_CORE", "data": "Discharge Summaries",
-        
-        "ip_address": "10.2.1.99", "location": "Hospital_Local", 
-        "timestamp": t_3am
+        "device_id": "ipad_pro_01", "target_segment": "EHR_CORE", "data": "Discharge Summaries",
+        "ip_address": "10.2.1.99", "location": "Hospital_Local", "timestamp": t_3am,
+        "protocol": "HTTPS"
     }
-    
     res = zta.process_access_request(req_night)
     print(f"Outcome: {res['status']} | Reason: {res['reason']}")
 
-    # --- SCENARIO 5: LEGACY DEVICE (Hard Block) ---
-    print("\n\n--- [SCENARIO 5] Legacy Device Access ---")
-    req_legacy = {
-        "user": "dr_house", "password": "secure_password_123", "mfa": "mfa_taken_A1",
-        "device_id": "mri_console_x", # Windows XP Device
-        "target_segment": "EHR_CORE", "data": "Scan Data",
-        "ip_address": "10.2.1.45", "location": "Hospital_Local", "timestamp": time.time()
-    }
+    # [SCENARIO 5] Legacy Device
+    print("\n--- [SCENARIO 5] Legacy Device Access (Windows XP) ---")
+    req_legacy = req_valid.copy()
+    req_legacy["device_id"] = "mri_console_x"
     res = zta.process_access_request(req_legacy)
     print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
+    # --- PART 3: MICROSEGMENTATION (New Features) ---
+    print("\n\n=== PART 3: MICROSEGMENTATION & LATERAL MOVEMENT ===")
+
+    # [SCENARIO 6] Lateral Movement (SSH Attack)
+    print("\n--- [SCENARIO 6] Lateral Movement Attempt (SSH) ---")
+    # Hacker uses Dr. House's stolen credentials to try SSH into the DB.
+    # Identity is Valid. Device is Valid. Protocol is INVALID.
+    req_attack = req_valid.copy()
+    req_attack["protocol"] = "SSH" 
+    print(f"Action: Doctor attempting SSH connection...")
+    res = zta.process_access_request(req_attack)
+    print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
+    # [SCENARIO 7] Valid IoMT Traffic (HL7)
+    print("\n--- [SCENARIO 7] Valid IoMT Device Traffic (HL7) ---")
+    # IoMT Engineer sending medical data via HL7 protocol
+    req_iomt = {
+        "user": "eng_bob", "password": "builder_pass_789", "mfa": "mfa_taken_C3",
+        "device_id": "eng_laptop_05", "target_segment": "EHR_CORE", "data": "MRI_PACKET",
+        "ip_address": "10.5.5.5", "location": "Hospital_Local", "timestamp": time.time(),
+        "protocol": "HL7" 
+    }
+    res = zta.process_access_request(req_iomt)
+    print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
+    # [SCENARIO 8] IoMT Device Misuse (Web Browsing)
+    print("\n--- [SCENARIO 8] IoMT Device Misuse (Web Browsing) ---")
+    # An MRI machine trying to open a Web Browser (HTTPS) to the internet/EHR.
+    # Blocked because MRI machines are only allowed to use HL7/DICOM.
+    req_iomt_bad = req_iomt.copy()
+    req_iomt_bad["protocol"] = "HTTPS"
+    res = zta.process_access_request(req_iomt_bad)
+    print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
+    generate_siem_dashboard()
 
 if __name__ == "__main__":
     run_scenarios()
