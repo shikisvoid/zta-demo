@@ -245,6 +245,35 @@ def run_scenarios():
         res = zta.process_access_request(req_timeout)
         print(f"Outcome: {res['status']} | Reason: {res['reason']}")
 
+        print("\n--- [SCENARIO 9] Data Tampering Attack (Man-in-the-Middle) ---")
+        
+        # 1. Create a valid request
+        print("1. Generating legitimate medical record...")
+        req_valid = {
+            "user": "dr_house", "password": "secure_password_123", "mfa": "mfa_taken_A1",
+            "device_id": "ipad_pro_01", "target_segment": "EHR_CORE", "data": "Prescription: 10mg Morphine",
+            "ip_address": "10.2.1.45", "location": "Hospital_Local", "timestamp": time.time(),
+            "protocol": "HTTPS"
+        }
+        result = zta.process_access_request(req_valid)
+        original_packet = result['secure_payload']
+        print(f"   [Original Hash] {original_packet['integrity_hash']}")
+
+        # 2. Simulate Attack (Tampering with the Ciphertext)
+        print("\n2. ATTACKER: Intercepting and modifying packet in transit...")
+        tampered_packet = original_packet.copy()
+        # Attacker tries to change the ciphertext slightly (simulated corruption)
+        tampered_packet['ciphertext'] = tampered_packet['ciphertext'][:-4] + "AAAA"
+        
+        # 3. Verify
+        print("3. RECEIVER: Attempting to decrypt and verify integrity...")
+        verification_result = zta.vault.decrypt_and_verify(tampered_packet)
+        
+        # Using red color for alert
+        if "COMPROMISED" in verification_result or "ERROR" in verification_result:
+            print(f"\033[91m{verification_result}\033[0m")
+        else:
+            print(f"Decryption Successful: {verification_result}")
 
     generate_siem_dashboard()
 

@@ -10,6 +10,7 @@ FIREWALL_RULES = {
     "PUBLIC_WIFI -> EHR_CORE": ["HTTPS", "TLS_1.3"],
     "IOMT_VLAN -> EHR_CORE": ["HL7", "MQTT", "DICOM"],
     "FINANCE_SUBNET -> FINANCE_SUBNET": ["HTTPS", "SSH", "RDP"],
+    
 }
 
 USERS_DB = {

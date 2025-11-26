@@ -1,13 +1,15 @@
-{"timestamp": 1764148752.0596147, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764148752.0606148, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764148752.0676463, "event_type": "RISK_ASSESSMENT", "risk_score": 150, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Impossible Travel:  8279km in 0.08h (+100)"]}}
-{"timestamp": 1764148752.0686567, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "nurse_joy", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
-{"timestamp": 1764148752.0686567, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "nurse_joy", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764148752.0696557, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "device": "mri_console_x", "reason": "Device Posture Failed: CRITICAL_RISK: Device OS 'Windows XP SP3' is end-of-life."}}
-{"timestamp": 1764148752.0696557, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "SSH", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
-{"timestamp": 1764148752.0696557, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
-{"timestamp": 1764148752.070657, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
-{"timestamp": 1764148752.070657, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "CRITICAL: IP Address changed mid-session (10.2.1.45 -> 192.168.1.100). Token Theft Suspected."}}
-{"timestamp": 1764148752.0716565, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764148752.0716565, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764148752.0726557, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "Session Expired due to Inactivity (Idle Timeout)"}}
+{"timestamp": 1764181563.610764, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
+{"timestamp": 1764181563.6117659, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764181563.6157641, "event_type": "RISK_ASSESSMENT", "risk_score": 180, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)", "Impossible Travel:  8279km in 0.08h (+100)"]}}
+{"timestamp": 1764181563.6157641, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "nurse_joy", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
+{"timestamp": 1764181563.6182947, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "nurse_joy", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764181563.6192937, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "device": "mri_console_x", "reason": "Device Posture Failed: CRITICAL_RISK: Device OS 'Windows XP SP3' is end-of-life."}}
+{"timestamp": 1764181563.6202946, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "SSH", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
+{"timestamp": 1764181563.6202946, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
+{"timestamp": 1764181563.6212933, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
+{"timestamp": 1764181563.6212933, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "CRITICAL: IP Address changed mid-session (10.2.1.45 -> 192.168.1.100). Token Theft Suspected."}}
+{"timestamp": 1764181563.6222935, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
+{"timestamp": 1764181563.6222935, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764181563.6232944, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "Session Expired due to Inactivity (Idle Timeout)"}}
+{"timestamp": 1764181563.6252964, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
+{"timestamp": 1764181563.6252964, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
