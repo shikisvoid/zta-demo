@@ -1,10 +1,13 @@
 import re
+from difflib import SequenceMatcher
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 
 class AdvancedPhishingGuard:
     def __init__(self):
+        self.trusted_domains = ["hospital.org", "med-center.com"]
+
         self.training_data = [
             ("Urgent: Verify your password immediately or lose access", "malicious"),
             ("IT Alert: Your account password has expired. Click to reset.", "malicious"),
@@ -36,39 +39,76 @@ class AdvancedPhishingGuard:
         self.model = make_pipeline(TfidfVectorizer(stop_words='english'), MultinomialNB())
         self.model.fit(texts, labels)
 
+    def _check_typosquatting(self, sender_email):
+        try:
+            sender_domain = sender_email.split('@')[1].lower()
+        except IndexError:
+            return False, "Invalid Email Format"
+        
+        if sender_domain in self.trusted_domains:
+            return False, "Trusted Domain"
+        
+        for trusted in self.trusted_domains:
+            similarity = SequenceMatcher(None, sender_domain, trusted).ratio()
+            # If it's 80% to 99% similar, it's likely a trick (Typosquatting)
+            if 0.80 < similarity < 1.0:
+                return True, f"Typosquatting Detected! ({sender_domain} ~= {trusted})"
+        return False, "External Domain"
+    
     def _check_heuristics(self, content):
-
-        risk_score = 0
+        score = 0
+        flags = []
         content_lower = content.lower()
 
         if "urgent" in content_lower or "immediate" in content_lower:
-            risk_score += 20
+            score += 20
+            flags.append("Urgency Language")
         
-        if any(w in content_lower for w in ["invoice", "wire transfer", "gift card", "direct deposit"]):
-            risk_score += 30
+        if any(w in content_lower for w in ["invoice", "wire transfer", "gift card"]):
+            score += 30
+            flags.append("Financial Trigger")
 
-        if any(w in content_lower for w in ["password", "credential", "login", "verify account"]):
-            risk_score += 40
+        if any(w in content_lower for w in ["password", "credential", "login", "verify"]):
+            score += 40
+            flags.append("Credential Harvesting")
 
-        return risk_score
+        return score, flags
 
     def scan_email(self, content, sender="external"):
+        result = {
+            "verdict": "SAFE",
+            "confidence": 0,
+            "flags": []
+        }
 
+        # 1. Typosquatting Check (High Confidence)
+        is_spoof, spoof_msg = self._check_typosquatting(sender)
+        if is_spoof:
+            result["verdict"] = "MALICIOUS"
+            result["confidence"] = 1.0
+            result["flags"].append(spoof_msg)
+            return result 
+
+        # 2. Machine Learning Analysis
         ml_verdict = self.model.predict([content])[0]
-        ml_confidence = self.model.predict_proba([content]).max()
+        ml_prob = self.model.predict_proba([content]).max()
+
+        # 3. Heuristic Analysis
+        heuristic_score, heuristic_flags = self._check_heuristics(content)
+        result["flags"].extend(heuristic_flags)
+
+        # 4. Final Decision Logic
+        if ml_verdict == "malicious" and ml_prob > 0.6:
+            result["verdict"] = "MALICIOUS"
+            result["confidence"] = round(ml_prob, 2)
+        elif heuristic_score >= 50:
+            result["verdict"] = "MALICIOUS"
+            result["confidence"] = 0.85
+            result["flags"].append("High Heuristic Risk")
         
-        heuristic_score = self._check_heuristics(content)
+        if "External Domain" in spoof_msg and "Credential Harvesting" in result["flags"]:
+            result["verdict"] = "MALICIOUS"
+            result["confidence"] = 0.95
+            result["flags"].append("External Sender Requesting Creds")
 
-        is_external = "hospital.org" not in sender
-        if is_external:
-            heuristic_score += 10
-
-        if ml_verdict == "malicious" and ml_confidence > 0.6:
-            return "malicious"
-        
-        # If ML says safe, but Heuristics scream danger (Score > 50), override it.
-        # This catches "Zero Day" attacks the ML model hasn't seen before.
-        if heuristic_score >= 50:
-            return "malicious (heuristic override)"
-
-        return "safe"
+        return result

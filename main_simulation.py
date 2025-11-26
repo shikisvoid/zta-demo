@@ -65,7 +65,6 @@ def generate_siem_dashboard():
 
     print_network_architecture()
 
-    """Reads the JSON log file and displays a summary table."""
     print("\n\n")
     print("="*100)
     print(f"{'SIEM DASHBOARD - INCIDENT REPORT':^100}")
@@ -103,11 +102,24 @@ def run_scenarios():
     print("\n\n=== PART 1: THREAT INTELLIGENCE ===")
     
     # [SCENARIO 1] Phishing
-    print("\n--- [SCENARIO 1] Phishing Email Defense ---")
-    email = "Urgent: Verify your password now or lose access"
-    print(f"Incoming: '{email}'")
-    verdict = phishing_guard.scan_email(email, sender="hacker@evil.com")
-    print(f"Verdict: {verdict.upper()}")
+    print("\n--- [SCENARIO 1A] Standard Phishing Attack ---")
+    email_1 = "Urgent: Verify your password now or lose access"
+    sender_1 = "hacker@evil.com"
+    print(f"Incoming: '{email_1}' FROM '{sender_1}'")
+
+    report_1 = phishing_guard.scan_email(email_1, sender=sender_1)
+    print(f"Verdict: {report_1['verdict']} (Conf: {report_1['confidence']})")
+    print(f"Flags:   {report_1['flags']}")
+
+    print("\n--- [SCENARIO 1B] Typosquatting Attack (Advanced) ---")
+    email_2 = "Please review the attached patient file."
+    # Looks like hospital.org, but uses '1' instead of 'l'
+    sender_2 = "admin@hospita1.org" 
+    print(f"Incoming: '{email_2}' FROM '{sender_2}'")
+
+    report_2 = phishing_guard.scan_email(email_2, sender=sender_2)
+    print(f"Verdict: {report_2['verdict']} (Conf: {report_2['confidence']})")
+    print(f"Flags:   {report_2['flags']}")
 
     # --- PART 2: ACCESS CONTROL & ADAPTIVE RISK ---
     print("\n\n=== PART 2: ACCESS CONTROL & RISK ENGINE ===")
