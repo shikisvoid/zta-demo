@@ -38,7 +38,7 @@ class SIEMLogger:
         with open(self.filename, "a") as f:
             f.write(json.dumps(log_entry) + "\n")
 
-        print(f"[SIEM] Logged Event: {event_type} (Risk: {risk_score})")
+        print(json.dumps(log_entry))
 
 class AdaptiveRiskEngine:
     def __init__(self, logger_instance):

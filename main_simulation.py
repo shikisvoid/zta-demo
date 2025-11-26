@@ -5,7 +5,66 @@ from device import DeviceManager
 from threats import AdvancedPhishingGuard
 from zta_engine import SecureAccessProxy
 
+def print_network_architecture():
+    print(r"""
+================================================================================
+                ZERO TRUST ARCHITECTURE: LOGICAL TRAFFIC FLOW
+================================================================================
+
+      [ UNTRUSTED ZONE: USERS & DEVICES ]
+      (Doctor, Nurse, IoMT Device, Hacker)
+                   |
+                   |  1. Access Request (Identity + Device + Context)
+                   v
+    +------------------------------------------------------------------+
+    |                 SECURE ACCESS PROXY (THE GATEWAY)                |
+    |                                                                  |
+    |   +--- PHASE 1: HARD SECURITY CHECKS ------------------------+   |
+    |   |                                                          |   |
+    |   |  [ CHECK 1 ] Identity Provider (IdP)                     |   |
+    |   |     |--> Invalid Creds? ----------------------------+    |   |
+    |   |     v                                               |    |   |
+    |   |  [ CHECK 2 ] Device Posture (Health)                |    |   |
+    |   |     |--> Malware/EOL OS? ---------------------------+    |   |
+    |   |     v                                               |    |   |
+    |   |  [ CHECK 3 ] RBAC (Role Check)                      |    |   |
+    |   |     |--> Wrong Role? -------------------------------+    |   |
+    |   |     v                                               |    |   |
+    |   |  [ CHECK 4 ] Microsegmentation Firewall             |    |   |
+    |   |     |--> Invalid Protocol (e.g. SSH)? --------------+    |   |
+    |   +-----------------------------------------------------+    |   |
+    |             | (All Hard Checks Passed)                      |    |
+    |             v                                               |    |
+    |   +--- PHASE 2: INTELLIGENCE & ADAPTIVE RISK ------------+   |   |
+    |   |                                                      |   |   |
+    |   |  [ RISK ENGINE ] Context Analysis                    |   |   |
+    |   |     (Time-of-Day, Impossible Travel, IP Rep)         |   |   |
+    |   |     |                                                |   |   |
+    |   |     +--> [ HIGH RISK ] --> Require MFA --> [ VERIFY ]    |   |
+    |   |     |                                       | (Fail)     |   |
+    |   |     +--> [ CRITICAL ] ----------------------+-------+    |   |
+    |   |     |                                       |       |    |   |
+    |   |     v (Low Risk / MFA Passed)               v       |    |   |
+    |   |  [ DATA VAULT ] Encryption Engine        [ BLOCK ]  |    |   |
+    |   +---------------------------------------------|--------+   |   |
+    |             |                                   |            |   |
+    +-------------|-----------------------------------|------------+   |
+                  |                                   |                |
+                  | (2. Secure Tunnel)                | (Log Event)    |
+                  v                                   v                |
+    +-----------------------------+           +------------------+     |
+    |   MICRO-SEGMENTED NETWORK   |           |  OBSERVABILITY   |     |
+    |                             |           |                  |     |
+    |  [ EHR Core ]  [ IoMT VLAN ]|           | [ SIEM LOG FILE ]|<----+
+    |  [ Finance  ]  [ WiFi      ]|           +------------------+
+    +-----------------------------+
+
+================================================================================
+    """)
 def generate_siem_dashboard():
+    
+    print_network_architecture()
+
     """Reads the JSON log file and displays a summary table."""
     print("\n\n")
     print("="*100)

@@ -1,8 +1,8 @@
-{"timestamp": 1764144510.1267765, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "HTTPS", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
-{"timestamp": 1764144510.1277783, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764144510.1277783, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764144510.1317987, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "nurse_joy", "protocol": "HTTPS", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
-{"timestamp": 1764144510.1327784, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "device": "mri_console_x", "reason": "Device Posture Failed: CRITICAL_RISK: Device OS 'Windows XP SP3' is end-of-life."}}
-{"timestamp": 1764144510.1347852, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "SSH", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
-{"timestamp": 1764144510.1347852, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
-{"timestamp": 1764144510.1357782, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
+{"timestamp": 1764145067.7052958, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "HTTPS", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
+{"timestamp": 1764145067.7062953, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
+{"timestamp": 1764145067.7072947, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764145067.7102942, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "nurse_joy", "protocol": "HTTPS", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
+{"timestamp": 1764145067.7112975, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "device": "mri_console_x", "reason": "Device Posture Failed: CRITICAL_RISK: Device OS 'Windows XP SP3' is end-of-life."}}
+{"timestamp": 1764145067.7112975, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "SSH", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
+{"timestamp": 1764145067.7122998, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
+{"timestamp": 1764145067.7122998, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
