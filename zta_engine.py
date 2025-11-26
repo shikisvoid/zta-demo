@@ -1,7 +1,7 @@
 from config import NETWORK_SEGMENTS, FIREWALL_RULES
 from encryption import DataVault
 import time
-import random
+from continuous_auth import SessionManager
 from advanced_zta import AccessRequest, AdaptiveRiskEngine, SIEMLogger
 
 class SecureAccessProxy:
@@ -11,12 +11,26 @@ class SecureAccessProxy:
         self.vault = DataVault()
         self.logger = SIEMLogger(reset = True)
         self.risk_engine = AdaptiveRiskEngine(self.logger)
+        self.session_mgr = SessionManager(self.risk_engine)
     
     def process_access_request(self, ctx):
         user = ctx['user']
+        session_id = ctx.get('session_id')
         print(f"\n--- GATEWAY: Processing Request for {user} ---")
 
         # === PHASE 1: HARD SECURITY CHECKS (Must Pass) ===
+        if session_id:
+            print(f"\n--- GATEWAY: Validating Active Session ({session_id[:8]}...) ---")
+            is_valid, msg = self.session_mgr.validate_session(session_id, ctx)
+            
+            if not is_valid:
+                self.logger.log("SESSION_REVOKED", 100, {"user": user, "reason": msg})
+                return {"status": "DENIED", "reason": msg}
+            
+            # If valid, pass through (Encryption phase)
+            print(f"   >>> Continuous Trust Verified. {msg}")
+            encrypted_data = self.vault.encrypt(ctx.get('data', ''))
+            return {"status": "GRANTED", "reason": "Session Validated", "secure_payload": encrypted_data}
 
         #Layer 1 : Identity
         is_auth, user_obj = self.idp.authenticate_user(user, ctx['password'])
@@ -86,6 +100,8 @@ class SecureAccessProxy:
             self.logger.log("MFA_SUCCESS", policy['score'], {"user": user, "reason": "Step-Up Auth Passed"})
             print("   >>> MFA Validated. Proceeding.")
         
+        new_session_id = self.session_mgr.create_session(user, user_obj['role'], ctx['device_id'], ctx)
+
         
         # === PHASE 3: DATA PROTECTION ===
 
@@ -93,6 +109,7 @@ class SecureAccessProxy:
         return {
             "status": "GRANTED", 
             "reason": f"Authorized (Risk Score: {policy['score']})",
+            "session_id": new_session_id,
             "secure_payload": encrypted_data,
             "decrypted_view": ctx['data']
         }

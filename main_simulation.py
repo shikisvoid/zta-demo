@@ -62,7 +62,7 @@ def print_network_architecture():
 ================================================================================
     """)
 def generate_siem_dashboard():
-    
+
     print_network_architecture()
 
     """Reads the JSON log file and displays a summary table."""
@@ -120,8 +120,14 @@ def run_scenarios():
         "ip_address": "10.2.1.45", "location": "Hospital_Local", "timestamp": time.time(),
         "protocol": "HTTPS"
     }
-    res = zta.process_access_request(req_valid)
-    print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+    res_login = zta.process_access_request(req_valid)
+    print(f"Outcome: {res_login['status']} | Reason: {res_login['reason']}")
+
+    active_session_id = res_login.get('session_id')
+    if active_session_id:
+        print(f"   [+] Session Token Generated: {active_session_id}")
+    else:
+        print("   [-] No Session Token Generated (Check zta_engine.py)")
 
     # [SCENARIO 3] Impossible Travel
     print("\n--- [SCENARIO 3] Impossible Travel (London) ---")
@@ -183,6 +189,50 @@ def run_scenarios():
     req_iomt_bad["protocol"] = "HTTPS"
     res = zta.process_access_request(req_iomt_bad)
     print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
+    print("\n\n=== PART 4: CONTINUOUS AUTHENTICATION & SESSION SECURITY ===")
+
+    if active_session_id:
+        # [SCENARIO 7A] Valid Session Activity
+        print("\n--- [SCENARIO 7A] Valid Session Usage (1 min later) ---")
+        req_continue = {
+            "user": "dr_house", "session_id": active_session_id, # USING TOKEN
+            "ip_address": "10.2.1.45", "location": "Hospital_Local", 
+            "timestamp": time.time() + 60, # 1 min later
+            "data": "More Patient Data"
+        }
+        res = zta.process_access_request(req_continue)
+        print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
+        # [SCENARIO 7B] Session Hijacking (Token Theft)
+        print("\n--- [SCENARIO 7B] Session Hijacking Attempt (IP Change) ---")
+        # Hacker steals the session ID but uses it from a different IP
+        req_hijack = {
+            "user": "dr_house", "session_id": active_session_id,
+            "ip_address": "192.168.1.100", # ATTACKER IP
+            "location": "Hospital_Local",
+            "timestamp": time.time() + 120, # 2 mins later
+            "data": "Exfiltrate All Data"
+        }
+        res = zta.process_access_request(req_hijack)
+        print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+        
+        # [SCENARIO 7C] Idle Timeout
+        print("\n--- [SCENARIO 7C] Idle Timeout (Walked Away) ---")
+        # Simulating a new login to get a fresh token for this test
+        print("(Simulating fresh login for timeout test...)")
+        fresh_login = zta.process_access_request(req_valid)
+        timeout_session = fresh_login.get('session_id')
+        
+        req_timeout = {
+            "user": "dr_house", "session_id": timeout_session,
+            "ip_address": "10.2.1.45", "location": "Hospital_Local",
+            "timestamp": time.time() + 600, # 10 minutes later (Limit is 5)
+            "data": "Patient Data"
+        }
+        res = zta.process_access_request(req_timeout)
+        print(f"Outcome: {res['status']} | Reason: {res['reason']}")
+
 
     generate_siem_dashboard()
 
