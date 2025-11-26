@@ -88,6 +88,64 @@ def generate_siem_dashboard():
     print("="*100)
     print("\n")
 
+def run_lateral_movement_demo(zta):
+    print("\n" + "="*80)
+    print("   [SCENARIO 10] LATERAL MOVEMENT: DATABASE EXFILTRATION ATTEMPT")
+    print("="*80)
+
+    # --- PHASE 1: THE COMPROMISE (Successful Entry) ---
+    print("\n[PHASE 1] INITIAL BREACH (Phishing Success)")
+    print(">> ATTACKER: Stolen credentials for 'dr_house' used to log in.")
+    
+    # FIX: Added 'data' field to prevent KeyError
+    req_breach = {
+        "user": "dr_house", 
+        "password": "secure_password_123", 
+        "mfa": "mfa_taken_A1",
+        "device_id": "ipad_pro_01", 
+        "target_segment": "EHR_CORE", 
+        "ip_address": "10.2.1.45", 
+        "location": "Hospital_Local", 
+        "timestamp": time.time(),
+        "protocol": "HTTPS",
+        "data": "Initial Login Data"  # <--- THIS LINE WAS MISSING
+    }
+    
+    res_breach = zta.process_access_request(req_breach)
+    
+    if res_breach['status'] == "GRANTED":
+        print(f" [SUCCESS] Attacker authenticated! Session established.")
+        print(f"   Context: Valid User (Doctor) | Valid Device (iPad) | Valid Path (HTTPS)")
+    else:
+        print(" Setup failed.")
+        return
+
+    # --- PHASE 2: THE PIVOT (Lateral Movement) ---
+    print("\n[PHASE 2] THE LATERAL MOVE (Database Direct Access)")
+    print(">> ATTACKER: Attempting to bypass the Web App and query the DB directly...")
+    print(">> ACTION: Opening Socket to port 5432 (PostgreSQL) on EHR Server.")
+
+    # Attacker tries to use the valid session to send SQL traffic
+    req_lateral = req_breach.copy()
+    req_lateral["protocol"] = "POSTGRES_SQL" 
+    req_lateral["data"] = "SELECT * FROM patients_table WHERE diagnosis = 'HIV';"
+    
+    print(f"   Target Segment: EHR_CORE")
+    print(f"   Protocol:       {req_lateral['protocol']}")
+    
+    # --- PHASE 3: ZTA ENFORCEMENT ---
+    print("\n[PHASE 3] ZERO TRUST ENFORCEMENT")
+    res_lateral = zta.process_access_request(req_lateral)
+    
+    print(f"   Outcome: {res_lateral['status']}") 
+    print(f"   Reason:  {res_lateral['reason']}")
+    
+    if "FIREWALL" in res_lateral['status']:
+        print("\n  [DEMO SUCCESSFUL] Microsegmentation Active!")
+        print("   The firewall rule 'HOSPITAL_LOCAL -> EHR_CORE' only allows ['HTTPS', 'TLS_1.3'].")
+        print("   The attempt to use 'POSTGRES_SQL' was blocked, despite the user being a valid Doctor.")
+    print("="*80 + "\n")
+
 def run_scenarios():
     idp = IdentityProvider()
     dev_mgr = DeviceManager()
@@ -274,6 +332,8 @@ def run_scenarios():
             print(f"\033[91m{verification_result}\033[0m")
         else:
             print(f"Decryption Successful: {verification_result}")
+
+    run_lateral_movement_demo(zta)
 
     generate_siem_dashboard()
 
