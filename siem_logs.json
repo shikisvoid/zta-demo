@@ -1,22 +1,23 @@
-{"timestamp": 1764224738.3838267, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764224738.3848283, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764224738.393823, "event_type": "RISK_ASSESSMENT", "risk_score": 150, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Impossible Travel:  8279km in 0.08h (+100)"]}}
-{"timestamp": 1764224738.394844, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "nurse_joy", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
-{"timestamp": 1764224738.394844, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "nurse_joy", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764224738.3968275, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "device": "mri_console_x", "reason": "Device Posture Failed: CRITICAL_RISK: Device OS 'Windows XP SP3' is end-of-life."}}
-{"timestamp": 1764224738.3988278, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "SSH", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
-{"timestamp": 1764224738.40083, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
-{"timestamp": 1764224738.4028304, "event_type": "RBAC_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "role": "IoMT Engineer", "target": "EHR_CORE"}}
-{"timestamp": 1764224738.4058301, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "CRITICAL: IP Address changed mid-session (10.2.1.45 -> 192.168.1.100). Token Theft Suspected."}}
-{"timestamp": 1764224738.4068353, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764224738.4078279, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764224738.4098258, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "Session Expired due to Inactivity (Idle Timeout)"}}
-{"timestamp": 1764224738.4098258, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764224738.4108212, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764224738.4108212, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
-{"timestamp": 1764224738.412829, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
-{"timestamp": 1764224738.4168339, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "POSTGRES_SQL", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
-{"timestamp": 1764224738.4188347, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Invalid Password"}}
-{"timestamp": 1764224738.4188347, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Invalid Password"}}
-{"timestamp": 1764224738.4198196, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Invalid Password"}}
-{"timestamp": 1764224738.4218304, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Account Locked: Too many failed attempts. Try again in 299 seconds."}}
+{"timestamp": 1764225987.7410913, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
+{"timestamp": 1764225987.7420754, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764225987.7480948, "event_type": "RISK_ASSESSMENT", "risk_score": 150, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)", "Impossible Travel:  8279km in 0.08h (+100)"]}}
+{"timestamp": 1764225987.7480948, "event_type": "RISK_ASSESSMENT", "risk_score": 80, "details": {"user": "nurse_joy", "reasons": ["High-Value Target (+50)", "Off-Hours Access (+30)"]}}
+{"timestamp": 1764225987.749077, "event_type": "MFA_SUCCESS", "risk_score": 80, "details": {"user": "nurse_joy", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764225987.749077, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "device": "mri_console_x", "reason": "Device Posture Failed: CRITICAL_RISK: Device OS 'Windows XP SP3' is end-of-life."}}
+{"timestamp": 1764225987.7500753, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "SSH", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
+{"timestamp": 1764225987.7500753, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "device": "eng_laptop_05", "reason": "Device Posture Failed: COMPLIANCE_FAIL: Full Disk Encryption (BitLocker/FileVault) is disabled."}}
+{"timestamp": 1764225987.7500753, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "eng_bob", "device": "eng_laptop_05", "reason": "Device Posture Failed: COMPLIANCE_FAIL: Full Disk Encryption (BitLocker/FileVault) is disabled."}}
+{"timestamp": 1764225987.7500753, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "CRITICAL: IP Address changed mid-session (10.2.1.45 -> 192.168.1.100). Token Theft Suspected."}}
+{"timestamp": 1764225987.7510808, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
+{"timestamp": 1764225987.7520852, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764225987.7530918, "event_type": "SESSION_REVOKED", "risk_score": 100, "details": {"user": "dr_house", "reason": "Session Expired due to Inactivity (Idle Timeout)"}}
+{"timestamp": 1764225987.7550879, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
+{"timestamp": 1764225987.756087, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764225987.760095, "event_type": "RISK_ASSESSMENT", "risk_score": 50, "details": {"user": "dr_house", "reasons": ["High-Value Target (+50)"]}}
+{"timestamp": 1764225987.763087, "event_type": "MFA_SUCCESS", "risk_score": 50, "details": {"user": "dr_house", "reason": "Step-Up Auth Passed"}}
+{"timestamp": 1764225987.7650857, "event_type": "FIREWALL_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "protocol": "POSTGRES_SQL", "path": "HOSPITAL_LOCAL -> EHR_CORE"}}
+{"timestamp": 1764225987.7680845, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Invalid Password"}}
+{"timestamp": 1764225987.7690856, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Invalid Password"}}
+{"timestamp": 1764225987.770084, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Invalid Password"}}
+{"timestamp": 1764225987.772082, "event_type": "IDENTITY_BLOCK", "risk_score": 100, "details": {"user": "dr_house", "reason": "Identity Failed: Account Locked: Too many failed attempts. Try again in 299 seconds."}}
+{"timestamp": 1764225987.7740881, "event_type": "DEVICE_BLOCK", "risk_score": 100, "details": {"user": "nurse_joy", "device": "nurse_laptop_compliance_fail", "reason": "Device Posture Failed: COMPLIANCE_FAIL: Full Disk Encryption (BitLocker/FileVault) is disabled."}}

@@ -184,6 +184,37 @@ def run_brute_force_demo(zta):
                 print("    (Note: This was the CORRECT password, but it was blocked by the lock!)")
     print("\n" + "="*80 + "\n")
 
+def run_device_posture_demo(zta):
+    print("\n" + "="*80)
+    print("   [SCENARIO 12] ROBUST DEVICE POSTURE: COMPLIANCE CHECKS")
+    print("="*80)
+
+    print("\n[TEST] Access Attempt from 'Nurse Station Laptop'")
+    print("   Attributes: Managed=True, Antivirus=True, OS=Win11")
+    print("   Flaw:       Disk Encryption is DISABLED")
+
+    req = {
+        "user": "nurse_joy", 
+        "password": "nurse_pass_456", 
+        "mfa": "mfa_taken_B2",
+        "device_id": "nurse_laptop_compliance_fail", 
+        "target_segment": "EHR_CORE", 
+        "ip_address": "10.2.1.99", 
+        "location": "Hospital_Local", 
+        "timestamp": time.time(),
+        "protocol": "HTTPS",
+        "data": "Patient Vitals"
+    }
+
+    result = zta.process_access_request(req)
+
+    print(f"   Outcome: {result['status']}")
+    print(f"   Reason:  {result['reason']}")
+
+    if "Encryption" in result['reason']:
+        print("\n[!] SUCCESS: The system correctly blocked a managed device because it lacked encryption.")
+    
+    print("="*80 + "\n")
 
 def run_scenarios():
     idp = IdentityProvider()
@@ -373,9 +404,8 @@ def run_scenarios():
             print(f"Decryption Successful: {verification_result}")
 
     run_lateral_movement_demo(zta)
-
     run_brute_force_demo(zta)
-    
+    run_device_posture_demo(zta)
     generate_siem_dashboard()
 
 if __name__ == "__main__":
