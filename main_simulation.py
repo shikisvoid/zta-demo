@@ -146,6 +146,45 @@ def run_lateral_movement_demo(zta):
         print("   The attempt to use 'POSTGRES_SQL' was blocked, despite the user being a valid Doctor.")
     print("="*80 + "\n")
 
+def run_brute_force_demo(zta):
+    print("\n" + "="*80)
+    print("   [SCENARIO 11] IDENTITY PROTECTION: BRUTE FORCE & ACCOUNT LOCKOUT")
+    print("="*80)
+
+    target_user = "dr_house"
+    print(f"\n[STEP 1] ATTACKER: Starting Brute Force Attack on '{target_user}'...")
+    print("   (Policy: Account locks after 3 failed attempts)")
+
+    password_list = ["wrong_pass_1", "123456", "admin", "secure_password_123"]
+
+    for i, pwd in enumerate(password_list):
+        attempt_num = i + 1
+        print(f"\n   >> Attempt {attempt_num}: Trying password '{pwd}'")
+        
+        req = {
+            "user": target_user, 
+            "password": pwd,
+            "device_id": "unknown_laptop", 
+            "target_segment": "EHR_CORE", 
+            "ip_address": "192.168.1.100", 
+            "location": "Unknown", 
+            "timestamp": time.time(),
+            "protocol": "HTTPS",
+            "data": "Login Packet"
+        }
+
+        result = zta.process_access_request(req)
+        
+        print(f"   Outcome: {result['status']}")
+        print(f"   Reason:  {result['reason']}")
+
+        if "Locked" in result['reason']:
+            print(f"\n[!] LOCKOUT CONFIRMED on Attempt {attempt_num}")
+            if pwd == "secure_password_123":
+                print("    (Note: This was the CORRECT password, but it was blocked by the lock!)")
+    print("\n" + "="*80 + "\n")
+
+
 def run_scenarios():
     idp = IdentityProvider()
     dev_mgr = DeviceManager()
@@ -335,6 +374,8 @@ def run_scenarios():
 
     run_lateral_movement_demo(zta)
 
+    run_brute_force_demo(zta)
+    
     generate_siem_dashboard()
 
 if __name__ == "__main__":
